@@ -1,15 +1,36 @@
-'''
-PART 5: SCATTER PLOTS
-- Write functions for the tasks below
-- Update main() in main.py to generate the plots and print statments when called
-- All plots should be output as PNG files to `data/part5_plots`
-'''
+import seaborn as sns
+import matplotlib.pyplot as plt
 
-# 1. Using lmplot, create a scatter plot where the x-axis is the prediction for felony and the y-axis the is prediction for a nonfelony, and hue this by whether the current charge is a felony. 
-# 
-# In a print statement, answer the following question: What can you say about the group of dots on the right side of the plot?
+def felony_vs_nonfelony_scatter(pred_universe):
+    sns.set(style="whitegrid")
+    sns.lmplot(
+        x="prediction_felony",
+        y="prediction_nonfelony",
+        hue="y_felony",
+        data=pred_universe,
+        height=6,
+        aspect=1.2,
+        scatter_kws={'alpha':0.5}
+    )
+    plt.title("Prediction Felony vs. Prediction Non-Felony by Actual Felony")
+    plt.savefig("data/part5_plots/felony_vs_nonfelony.png")
+    print("Q: What can you say about the group of dots on the right side of the plot?")
+    print("A: Those dots likely indicate individuals predicted to be high risk for both felony and non-felony outcomes, especially when current charge is felony.")
 
-
-# 2. Create a scatterplot where the x-axis is prediction for felony rearrest and the y-axis is whether someone was actually rearrested.
-# 
-# In a print statement, answer the following question: Would you say based off of this plot if the model is calibrated or not?
+def calibration_scatter(pred_universe):
+    sns.set(style="whitegrid")
+    plt.figure(figsize=(10, 6))
+    sns.scatterplot(
+        x="prediction_felony",
+        y="y_felony",
+        data=pred_universe,
+        alpha=0.5
+    )
+    plt.title("Felony Prediction vs. Actual Rearrest Outcome")
+    plt.xlabel("Prediction for Felony Rearrest")
+    plt.ylabel("Actual Rearrest (Felony)")
+    plt.tight_layout()
+    plt.savefig("data/part5_plots/calibration_plot.png")
+    plt.close()
+    print("Q: Is the model calibrated?")
+    print("A: If the points trend upward along the diagonal, the model is more likely calibrated. If not, the predictions may be poorly calibrated.")
